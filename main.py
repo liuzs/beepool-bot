@@ -58,13 +58,18 @@ def get_content(url):  # 获取网页数据
 
 def get_data(html_text):  # 从json文件中处理数据
     str_json = json.loads(html_text)
-    list1 = str_json.get("data").get("miner").get("activeWorkers").get("list")
+    activelist = str_json.get("data").get("miner").get("activeWorkers").get("list")
+    inactivelist = str_json.get("data").get("miner").get("inactiveWorkers").get("list")
     list2 = str_json.get("data").get("last_24_hour_income")
     result1 = []
     result2 = []
-    for i in list1:
+    for i in activelist:
         result1.append(i.get("name"))  # 存名字
-    for i in list1:
+    for i in activelist:
+        result2.append((i.get("avg_hashrate")) / 1000000)  # 存24小时算力，并转换格式
+    for i in inactivelist:
+        result1.append(i.get("name"))  # 存名字
+    for i in inactivelist:
         result2.append((i.get("avg_hashrate")) / 1000000)  # 存24小时算力，并转换格式
     result1.append("last_24_hour_income")
     result1.append("time")
